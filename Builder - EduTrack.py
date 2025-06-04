@@ -7,7 +7,7 @@ class Alerta:
         self.partes = []
 
     def agregar_parte(self, parte):
-        # Agrega una parte al contenido de la alerta
+        # Agrega una parte al contenido de la alerta (título, contenido, recomendaciones)
         self.partes.append(parte)
 
     def mostrar_alerta(self):
@@ -18,16 +18,21 @@ class Alerta:
 
 # Interfaz abstracta del Builder
 class BuilderAlerta(ABC):
+
     @abstractmethod
+    # Reinicia el proceso de construcción de una alerta.
     def reset(self): pass
 
     @abstractmethod
+    # Agrega el encabezado o título de la alerta.
     def agregar_titulo(self): pass
 
     @abstractmethod
+    # Agrega el contenido central o mensaje principal de la alerta.
     def agregar_contenido(self): pass
 
     @abstractmethod
+    # Agrega recomendaciones o acciones sugeridas al final de la alerta.
     def agregar_recomendaciones(self): pass
 
 # Builder concreto para alertas académicas
@@ -49,7 +54,7 @@ class BuilderAlertaAcademica(BuilderAlerta):
         self.alerta.agregar_parte("Se recomienda agendar tutorías y reforzar hábitos de estudio.")
 
     def obtener_resultado(self):
-        # Devuelve la alerta construida y resetea el builder
+        # Devuelve el producto final (la alerta completa) y resetea el builder para que esté listo para una nueva construcción
         resultado = self.alerta
         self.reset()
         return resultado
@@ -61,22 +66,22 @@ class DirectorAlerta:
         self._builder = builder
 
     def construir_alerta_completa(self):
-        # Define la secuencia de pasos para construir la alerta
+        # Define la secuencia de pasos para construir la alerta: título -> contenido -> recomendaciones.
         self._builder.agregar_titulo()
         self._builder.agregar_contenido()
         self._builder.agregar_recomendaciones()
 
 # Código cliente (main)
 if __name__ == "__main__":
-    # Se instancia el builder concreto
+    # Instanciamos el builder concreto para alertas académicas
     builder = BuilderAlertaAcademica()
 
-    # Se pasa el builder al director
+    # Creamos un director que usará este builder
     director = DirectorAlerta(builder)
 
-    # El director construye la alerta
+    # El director construye una alerta completa
     director.construir_alerta_completa()
 
-    # Se obtiene y muestra la alerta
+    # Obtenemos el resultado final y lo mostramos por consola
     alerta = builder.obtener_resultado()
     alerta.mostrar_alerta()
